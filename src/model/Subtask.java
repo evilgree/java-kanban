@@ -1,6 +1,8 @@
+package model;
+
 import java.util.Objects;
 
-class Subtask extends Task {
+public class Subtask extends Task {
     private int epicId;
 
     public Subtask(String title, String description, int epicId) {
