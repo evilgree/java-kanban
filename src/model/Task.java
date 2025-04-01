@@ -11,7 +11,7 @@ public class Task {
     public Task(String title, String description) {
         this.title = title;
         this.description = description;
-        this.status = Status.NEW; // По умолчанию статус новой задачи
+        this.status = Status.NEW;
     }
 
     public String getTitle() {

@@ -11,7 +11,7 @@ public class Main {
         Task task1 = taskManager.createTask(new Task("Задача 1", "Описание задачи 1"));
         Task task2 = taskManager.createTask(new Task("Задача 2", "Описание задачи 2"));
 
-        // Создание эпиков с подзадачами
+
         Epic epic1 = taskManager.createEpic(new Epic("Эпик 1", "Описание эпика 1"));
         Subtask subtask1 = taskManager.createSubtask(new Subtask("Подзадача 1", "Описание подзадачи 1", epic1.getId()));
         Subtask subtask2 = taskManager.createSubtask(new Subtask("Подзадача 2", "Описание подзадачи 2", epic1.getId()));
@@ -25,14 +25,12 @@ public class Main {
         System.out.println("Все подзадачи:");
         System.out.println(taskManager.getAllSubtasks());
 
-
         System.out.println("Все эпики:");
         System.out.println(taskManager.getAllEpics());
 
-        task1.setStatus(Status.IN_PROGRESS);
-        task2.setStatus(Status.DONE);
-        subtask1.setStatus(Status.DONE);
-        subtask2.setStatus(Status.NEW);
+
+        taskManager.updateSubtask(new Subtask(subtask1.getTitle(), subtask1.getDescription(), epic1.getId(), Status.DONE));
+        taskManager.updateSubtask(new Subtask(subtask2.getTitle(), subtask2.getDescription(), epic1.getId(), Status.NEW));
 
         System.out.println("Статусы после изменений:");
         System.out.println("Задача 1: " + task1.getStatus());

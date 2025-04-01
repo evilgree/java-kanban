@@ -10,7 +10,15 @@ public class Subtask extends Task {
         this.epicId = epicId;
     }
 
-    public int getEpicId() { return epicId; }
+    public Subtask(String title, String description, int epicId, Status status) {
+        super(title, description);
+        this.epicId = epicId;
+        setStatus(status);
+    }
+
+    public int getEpicId() {
+        return epicId;
+    }
 
     @Override
     public boolean equals(Object o) {
