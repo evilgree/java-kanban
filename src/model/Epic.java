@@ -12,13 +12,9 @@ public class Epic extends Task {
 
     public void addSubtask(Subtask subtask) {
         subtaskIds.add(subtask.getId());
-        updateEpicStatus();
     }
 
     public List<Integer> getSubtaskIds() {
         return subtaskIds;
-    }
-
-    private void updateEpicStatus() {
     }
 }
