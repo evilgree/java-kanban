@@ -85,10 +85,10 @@ class TaskManagerTest {
     void testImmutabilityOfTaskWhenAddedToManager() {
         Task originalTask = new Task(3, "Original Task", "Original Description", Status.NEW);
 
-        // Add the original task to the manager
+
         taskManager.addNewTask(originalTask);
 
-        // Retrieve the saved version and check if it matches the original
+
         Task savedTask = taskManager.getTask(originalTask.getId());
 
         assertEquals(originalTask.getTitle(), savedTask.getTitle(),
@@ -105,7 +105,7 @@ class TaskManagerTest {
     void testHistoryManagement() {
         Task task = new Task(4, "History Test Task", "History Test Description", Status.NEW);
 
-        // Add to history manager
+
         historyManager.add(task);
 
         List<Task> history = historyManager.getHistory();
