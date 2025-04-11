@@ -1,4 +1,6 @@
-package model;
+package manager.model;
+
+import manager.Status;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,8 +9,7 @@ public class Epic extends Task {
     private final List<Integer> subtaskIds;
 
     public Epic(int id, String title, String description) {
-        super(id, title, description, Status.NEW);
-
+        super(title, description, Status.NEW);
         this.subtaskIds = new ArrayList<>();
     }
 
