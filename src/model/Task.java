@@ -2,16 +2,22 @@ package model;
 
 import java.util.Objects;
 
+
 public class Task {
-    private String title;
-    private String description;
-    private int id;
+    private final int id;
+    private final String title;
+    private final String description;
     private Status status;
 
-    public Task(String title, String description) {
+    public Task(int id, String title, String description, Status status) {
+        this.id = id;
         this.title = title;
         this.description = description;
-        this.status = Status.NEW;
+        this.status = status;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getTitle() {
@@ -22,28 +28,12 @@ public class Task {
         return description;
     }
 
-    public int getId() {
-        return id;
-    }
-
     public Status getStatus() {
         return status;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public void setStatus(Status status) {
         this.status = status;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     @Override
@@ -51,11 +41,11 @@ public class Task {
         if (this == o) return true;
         if (!(o instanceof Task)) return false;
         Task task = (Task) o;
-        return id == task.id && Objects.equals(title, task.title);
+        return id == task.id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, id);
+        return Objects.hash(id, title, description, status);
     }
 }

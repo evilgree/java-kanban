@@ -4,14 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Epic extends Task {
-    private List<Integer> subtaskIds = new ArrayList<>();
+    private final List<Integer> subtaskIds;
 
-    public Epic(String title, String description) {
-        super(title, description);
+    public Epic(int id, String title, String description) {
+        super(id, title, description, Status.NEW);
+
+        this.subtaskIds = new ArrayList<>();
     }
 
-    public void addSubtask(Subtask subtask) {
-        subtaskIds.add(subtask.getId());
+    public boolean addSubtask(int subtaskId) {
+        if (subtaskId == getId()) {
+            return false;
+        }
+        subtaskIds.add(subtaskId);
+        return true;
     }
 
     public List<Integer> getSubtaskIds() {
