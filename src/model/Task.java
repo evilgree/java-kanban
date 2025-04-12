@@ -1,4 +1,4 @@
-package manager.model;
+package model;
 
 import manager.Status;
 
@@ -51,10 +51,10 @@ public class Task {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true; // Сравнение ссылок
-        if (o == null || getClass() != o.getClass()) return false; // Проверка на null и тип
-        Task task = (Task) o; // Приведение типа
-        return id == task.id; // Сравнение по id (можно добавить другие поля, если нужно)
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Task task = (Task) o;
+        return id == task.id;
     }
 
     @Override

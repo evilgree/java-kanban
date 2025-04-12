@@ -1,7 +1,7 @@
 package test;
 import manager.HistoryManager;
 import manager.InMemoryHistoryManager;
-import manager.model.Task;
+import model.Task;
 import manager.Status;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

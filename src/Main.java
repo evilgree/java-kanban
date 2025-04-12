@@ -1,7 +1,7 @@
 import manager.Managers;
 import manager.Status;
 import manager.TaskManager;
-import manager.model.*;
+import model.*;
 
 public class Main {
     public static void main(String[] args) {

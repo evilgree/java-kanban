@@ -1,5 +1,5 @@
 package test;
-import manager.model.Subtask;
+import model.Subtask;
 import manager.Status;
 import org.junit.jupiter.api.Test;
 

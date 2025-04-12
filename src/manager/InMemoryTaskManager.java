@@ -1,6 +1,6 @@
 package manager;
 
-import manager.model.*;
+import model.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -66,17 +66,34 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Task getTaskById(int taskId) {
-        return tasks.get(taskId);
+        Task task = tasks.get(taskId);
+        if (task != null) {
+            historyManager.add(task);
+        }
+        return task;
     }
 
     @Override
     public Subtask getSubtaskById(int subtaskId) {
-        return subtasks.get(subtaskId);
+        Subtask subtask = subtasks.get(subtaskId);
+        if (subtask != null) {
+            historyManager.add(subtask);
+        }
+        return subtask;
     }
 
     @Override
     public Epic getEpicById(int epicId) {
-        return epics.get(epicId);
+        Epic epic = epics.get(epicId);
+        if (epic != null) {
+            historyManager.add(epic);
+        }
+        return epic;
+    }
+
+    @Override
+    public List<Task> getHistory() {
+        return historyManager.getHistory();
     }
 
     @Override

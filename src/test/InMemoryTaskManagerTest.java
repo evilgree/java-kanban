@@ -1,8 +1,10 @@
 package test;
 import manager.*;
-import manager.model.*;
+import model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -57,5 +59,19 @@ class InMemoryTaskManagerTest {
 
         assertNotEquals(modifiedTask.getTitle(), retrievedTask.getTitle(),
                 "Название извлечённой задачи не должно изменяться после изменения оригинала.");
+    }
+
+    @Test
+    void testHistoryManagerRecordsTaskView() {
+        Task task = new Task("Тестовая задача", "Описание задачи", Status.NEW);
+        taskManager.createTask(task);
+
+
+        Task retrievedTask = taskManager.getTaskById(task.getId());
+
+
+        List<Task> history = taskManager.getHistory();
+        assertEquals(1, history.size(), "История должна содержать одну задачу.");
+        assertEquals(retrievedTask, history.get(0), "Задача в истории должна соответствовать полученной задаче.");
     }
 }
