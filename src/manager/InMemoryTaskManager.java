@@ -190,7 +190,7 @@ public class InMemoryTaskManager implements TaskManager {
 
         for (int subtaskID : epic.getSubtaskIds()) {
             Subtask subtask = subtasks.get(subtaskID);
-            if (subtask != null){
+            if (subtask != null) {
                 switch (subtask.getStatus()){
                     case DONE:
                         doneCount++;
