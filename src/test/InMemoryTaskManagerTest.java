@@ -172,7 +172,7 @@ class InMemoryTaskManagerTest {
         Task task = taskManager.createTask(new Task("Title", "Описание", Status.NEW));
         int id = task.getId();
 
-        // Изменяем поля через сеттеры
+        
         task.setTitle("New Title");
         task.setDescription("New Desc");
         task.setStatus(Status.DONE);
@@ -183,8 +183,6 @@ class InMemoryTaskManagerTest {
 
         assertEquals("New Title", fromManager.getTitle(), "Изменения через сеттеры влияют на объект в менеджере");
         assertEquals(Status.DONE, fromManager.getStatus(), "Статус изменился через сеттер");
-
-        // Возможный вариант решения - возвращать копии или использовать immutable объекты
     }
 
     @Test
@@ -192,5 +190,4 @@ class InMemoryTaskManagerTest {
         Subtask subtask = taskManager.createSubtask(new Subtask("Подзадача", "Описание", 9999, Status.NEW));
         assertNull(subtask, "Создание подзадачи с несуществующим id эпика должно вернуть null");
     }
-
 }
