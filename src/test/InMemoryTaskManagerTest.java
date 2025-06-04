@@ -73,6 +73,7 @@ class InMemoryTaskManagerTest {
         assertEquals(1, history.size(), "История должна содержать одну задачу.");
         assertEquals(retrievedTask, history.get(0), "Задача в истории должна соответствовать полученной задаче.");
     }
+    
     @Test
     void testDeleteSubtaskRemovesIdFromEpic() {
         Epic epic = taskManager.createEpic(new Epic("Заголовок", "Описание"));
@@ -172,7 +173,7 @@ class InMemoryTaskManagerTest {
         Task task = taskManager.createTask(new Task("Title", "Описание", Status.NEW));
         int id = task.getId();
 
-        
+
         task.setTitle("New Title");
         task.setDescription("New Desc");
         task.setStatus(Status.DONE);
