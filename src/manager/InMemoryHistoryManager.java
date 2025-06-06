@@ -60,12 +60,11 @@ public class InMemoryHistoryManager implements HistoryManager {
         Node node = new Node(task);
         if (tail == null) {
             head = node;
-            tail = node;
         } else {
             tail.next = node;
             node.prev = tail;
-            tail = node;
         }
+        tail = node;
         nodeMap.put(task.getId(), node);
     }
 
