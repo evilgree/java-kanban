@@ -118,6 +118,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void deleteTask(int taskId) {
         tasks.remove(taskId);
+        historyManager.remove(taskId);
     }
 
     @Override
@@ -129,6 +130,7 @@ public class InMemoryTaskManager implements TaskManager {
                 epic.getSubtaskIds().remove(Integer.valueOf(subtaskId));
                 updateEpicStatus(epic);
             }
+            historyManager.remove(subtaskId);
         }
     }
 
@@ -138,17 +140,25 @@ public class InMemoryTaskManager implements TaskManager {
         if (epic != null) {
             for (int subtaskId : epic.getSubtaskIds()) {
                 subtasks.remove(subtaskId);
+                historyManager.remove(subtaskId);
             }
+            epic.getSubtaskIds().clear();
         }
     }
 
     @Override
     public void deleteAllTasks() {
+        for (int taskId : tasks.keySet()) {
+            historyManager.remove(taskId);
+        }
         tasks.clear();
     }
 
     @Override
     public void deleteAllSubtasks() {
+        for (int subtaskId : subtasks.keySet()) {
+            historyManager.remove(subtaskId);
+        }
         subtasks.clear();
         for (Epic epic : epics.values()) {
             epic.getSubtaskIds().clear();
@@ -158,6 +168,12 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteAllEpics() {
+        for (int epicId : epics.keySet()) {
+            historyManager.remove(epicId);
+        }
+        for (int subtaskId : subtasks.keySet()) {
+            historyManager.remove(subtaskId);
+        }
         for (Epic epic : epics.values()) {
             epic.getSubtaskIds().clear();
         }
@@ -186,8 +202,8 @@ public class InMemoryTaskManager implements TaskManager {
 
         for (int subtaskID : epic.getSubtaskIds()) {
             Subtask subtask = subtasks.get(subtaskID);
-            if (subtask != null){
-                switch (subtask.getStatus()){
+            if (subtask != null) {
+                switch (subtask.getStatus()) {
                     case DONE:
                         doneCount++;
                         break;
