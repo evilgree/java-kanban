@@ -1,6 +1,5 @@
 package model;
 
-import manager.Status;
 import manager.TaskType;
 
 public class Subtask extends Task {

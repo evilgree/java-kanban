@@ -1,5 +1,5 @@
 import manager.Managers;
-import manager.Status;
+import model.Status;
 import manager.TaskManager;
 import model.*;
 
