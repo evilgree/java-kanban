@@ -56,7 +56,7 @@ public class CSVTaskConverter {
                 throw new IllegalArgumentException("Неизвестный тип задачи: " + type);
         }
     }
-    
+
     public static List<Integer> historyFromString(String value) {
         if (value == null || value.isEmpty()) {
             return Collections.emptyList();
