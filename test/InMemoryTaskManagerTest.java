@@ -1,6 +1,12 @@
 package test;
-import manager.*;
-import model.*;
+
+import manager.Managers;
+import manager.TaskManager;
+import manager.HistoryManager;
+import model.Task;
+import model.Epic;
+import model.Subtask;
+import model.Status;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +19,7 @@ class InMemoryTaskManagerTest {
 
     @BeforeEach
     void setUp() {
-        taskManager = Managers.getDefault();
+        taskManager = new InMemoryTaskManager(Managers.getDefaultHistory());
     }
 
     @Test
@@ -157,7 +163,6 @@ class InMemoryTaskManagerTest {
         assertEquals(3, history.size(), "История должна содержать 3 задачи без дубликатов");
         assertEquals(List.of(task1, task3, task2), history, "Порядок в истории должен сохраняться и обновляться при повторном добавлении");
 
-        // Удалим task3 из истории
         HistoryManager historyManager = Managers.getDefaultHistory();
         historyManager.add(task1);
         historyManager.add(task2);
