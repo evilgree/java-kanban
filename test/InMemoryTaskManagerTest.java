@@ -4,11 +4,11 @@ import manager.InMemoryTaskManager;
 import manager.Managers;
 import manager.TaskManager;
 import manager.HistoryManager;
+import manager.Status;
 
 import model.Task;
 import model.Epic;
 import model.Subtask;
-import model.Status;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,5 +1,6 @@
 package model;
 
+import manager.Status;
 import manager.TaskType;
 
 import java.util.ArrayList;
