@@ -1,6 +1,7 @@
 package model;
 
 import manager.Status;
+import manager.TaskType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,5 +24,10 @@ public class Epic extends Task {
 
     public List<Integer> getSubtaskIds() {
         return subtaskIds;
+    }
+
+    @Override
+    public TaskType getType() {
+        return TaskType.EPIC;
     }
 }
