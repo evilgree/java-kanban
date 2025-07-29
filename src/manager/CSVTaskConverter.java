@@ -57,7 +57,7 @@ public class CSVTaskConverter {
         }
     }
     
-public static List<Integer> historyFromString(String value) {
+    public static List<Integer> historyFromString(String value) {
         if (value == null || value.isEmpty()) {
             return Collections.emptyList();
         }
