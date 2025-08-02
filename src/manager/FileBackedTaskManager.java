@@ -66,8 +66,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 } else {
                     manager.tasks.put(task.getId(), task);
                 }
-                if (task.getId() >= manager.idCounter) {
-                    manager.idCounter = task.getId() + 1;
+                if (task.getId() >= manager.nextId) {
+                    manager.nextId = task.getId() + 1;
                 }
                 i++;
             }
@@ -92,10 +92,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
             for (Subtask subtask : manager.subtasks.values()) {
                 Epic epic = manager.epics.get(subtask.getEpicId());
-                if (epic != null) {
-                    if (!epic.getSubtaskIds().contains(subtask.getId())) {
-                        epic.addSubtask(subtask.getId());
-                    }
+                if (epic != null && !epic.getSubtaskIds().contains(subtask.getId())) {
+                    epic.addSubtask(subtask.getId());
                 }
             }
 
@@ -187,22 +185,16 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     @Override
     public Task getTaskById(int id) {
-        Task task = super.getTaskById(id);
-        save();
-        return task;
+        return super.getTaskById(id);
     }
 
     @Override
     public Epic getEpicById(int id) {
-        Epic epic = super.getEpicById(id);
-        save();
-        return epic;
+        return super.getEpicById(id);
     }
 
     @Override
     public Subtask getSubtaskById(int id) {
-        Subtask subtask = super.getSubtaskById(id);
-        save();
-        return subtask;
+        return super.getSubtaskById(id);
     }
 }
