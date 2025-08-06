@@ -11,8 +11,8 @@ public class Task {
     private String description;
     private int id;
     private Status status;
-    private Duration duration = Duration.ZERO;
-    private LocalDateTime startTime = null;
+    protected Duration duration = Duration.ZERO;
+    protected LocalDateTime startTime = null;
 
     public Task(String title, String description, Status status) {
         this.title = title;

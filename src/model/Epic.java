@@ -9,8 +9,6 @@ import java.time.LocalDateTime;
 
 public class Epic extends Task {
     private final List<Integer> subtaskIds;
-    private Duration duration = Duration.ZERO;
-    private LocalDateTime startTime;
     private LocalDateTime endTime;
 
     public Epic(String title, String description) {
@@ -44,33 +42,8 @@ public class Epic extends Task {
         return endTime;
     }
 
-    public void updateTimeAndDuration(List<Subtask> subtasks) {
-        if (subtasks.isEmpty()) {
-            duration = Duration.ZERO;
-            startTime = null;
-            endTime = null;
-            return;
-        }
-
-        duration = Duration.ZERO;
-        startTime = null;
-        endTime = null;
-
-        for (Subtask subtask : subtasks) {
-            if (subtask.getStartTime() == null || subtask.getDuration() == null) {
-                continue;
-            }
-            duration = duration.plus(subtask.getDuration());
-
-            if (startTime == null || subtask.getStartTime().isBefore(startTime)) {
-                startTime = subtask.getStartTime();
-            }
-
-            LocalDateTime subtaskEnd = subtask.getEndTime();
-            if (endTime == null || (subtaskEnd != null && subtaskEnd.isAfter(endTime))) {
-                endTime = subtaskEnd;
-            }
-        }
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
     }
 
     @Override

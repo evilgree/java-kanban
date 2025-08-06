@@ -2,6 +2,7 @@ package manager;
 
 import model.*;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,6 +16,11 @@ public class InMemoryTaskManager implements TaskManager {
     protected HistoryManager historyManager;
     protected int nextId = 1;
 
+    private final TreeSet<Task> prioritizedTasks = new TreeSet<>(
+            Comparator.comparing(Task::getStartTime)
+                    .thenComparing(Task::getId)
+    );
+
     public InMemoryTaskManager(HistoryManager historyManager) {
         this.historyManager = historyManager;
 
@@ -23,11 +29,6 @@ public class InMemoryTaskManager implements TaskManager {
     private int getNextId() {
         return nextId++;
     }
-
-    private final TreeSet<Task> prioritizedTasks = new TreeSet<>(
-            Comparator.comparing(Task::getStartTime, Comparator.nullsLast(Comparator.naturalOrder()))
-                    .thenComparing(Task::getId)
-    );
 
     @Override
     public Task createTask(Task task) {
@@ -144,6 +145,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void updateEpic(Epic epic) {
         epics.put(epic.getId(), epic);
+        updateEpicStatus(epic);
     }
 
     @Override
@@ -238,56 +240,84 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     protected void updateEpicStatus(Epic epic) {
+        List<Subtask> subtasks = getSubtasksByEpicId(epic.getId());
+        if (subtasks.isEmpty()) {
+            epic.setDuration(Duration.ZERO);
+            epic.setStartTime(null);
+            epic.setEndTime(null);
+            epic.setStatus(Status.NEW);
+            return;
+        }
+
+        Duration totalDuration = Duration.ZERO;
+        LocalDateTime earliestStartTime = null;
+        LocalDateTime latestEndTime = null;
+
         int doneCount = 0;
         int newCount = 0;
 
-        for (int subtaskID : epic.getSubtaskIds()) {
-            Subtask subtask = subtasks.get(subtaskID);
-            if (subtask != null) {
-                switch (subtask.getStatus()) {
-                    case DONE:
-                        doneCount++;
-                        break;
-                    case NEW:
-                        newCount++;
-                        break;
-                    case IN_PROGRESS:
-                        epic.setStatus(Status.IN_PROGRESS);
-                        return;
+        for (Subtask subtask : subtasks) {
+            switch (subtask.getStatus()) {
+                case DONE:
+                    doneCount++;
+                    break;
+                case NEW:
+                    newCount++;
+                    break;
+                case IN_PROGRESS:
+                    epic.setStatus(Status.IN_PROGRESS);
+                    break;
+            }
+
+            if (subtask.getStartTime() != null && subtask.getDuration() != null) {
+                totalDuration = totalDuration.plus(subtask.getDuration());
+
+                if (earliestStartTime == null || subtask.getStartTime().isBefore(earliestStartTime)) {
+                    earliestStartTime = subtask.getStartTime();
+                }
+
+                LocalDateTime subtaskEnd = subtask.getEndTime();
+                if (latestEndTime == null || (subtaskEnd != null && subtaskEnd.isAfter(latestEndTime))) {
+                    latestEndTime = subtaskEnd;
                 }
             }
         }
-        if (doneCount == epic.getSubtaskIds().size() && doneCount > 0) {
+
+        epic.setDuration(totalDuration);
+        epic.setStartTime(earliestStartTime);
+        epic.setEndTime(latestEndTime);
+
+        if (doneCount == subtasks.size() && doneCount > 0) {
             epic.setStatus(Status.DONE);
-        } else if (newCount == epic.getSubtaskIds().size()) {
+        } else if (newCount == subtasks.size()) {
             epic.setStatus(Status.NEW);
-        } else {
+        } else if (epic.getStatus() != Status.IN_PROGRESS) {
             epic.setStatus(Status.IN_PROGRESS);
         }
+    }
+
+    private boolean isIntersectingWith(Task t1, Task t2) {
+        if (t1.getStartTime() == null || t1.getDuration() == null) {
+            return false;
+        }
+        if (t2.getStartTime() == null || t2.getDuration() == null) {
+            return false;
+        }
+        LocalDateTime start1 = t1.getStartTime();
+        LocalDateTime end1 = t1.getEndTime();
+        LocalDateTime start2 = t2.getStartTime();
+        LocalDateTime end2 = t2.getEndTime();
+
+        return start1.isBefore(end2) && end1.isAfter(start2);
     }
 
     private boolean isIntersecting(Task newTask) {
         if (newTask.getStartTime() == null || newTask.getDuration() == null) {
             return false;
         }
-        LocalDateTime newStart = newTask.getStartTime();
-        LocalDateTime newEnd = newTask.getEndTime();
-
-        for (Task task : prioritizedTasks) {
-            if (task.getId() == newTask.getId()) {
-                continue;
-            }
-            if (task.getStartTime() == null || task.getDuration() == null) {
-                continue;
-            }
-            LocalDateTime start = task.getStartTime();
-            LocalDateTime end = task.getEndTime();
-
-            if (newStart.isBefore(end) && newEnd.isAfter(start)) {
-                return true;
-            }
-        }
-        return false;
+        return prioritizedTasks.stream()
+                .filter(task -> task.getId() != newTask.getId())
+                .anyMatch(task -> isIntersectingWith(newTask, task));
     }
 
     private void addToPrioritized(Task task) {
