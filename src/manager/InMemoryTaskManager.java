@@ -53,7 +53,7 @@ public class InMemoryTaskManager implements TaskManager {
         subtask.setId(getNextId());
         subtasks.put(subtask.getId(), subtask);
         epic.addSubtask(subtask.getId());
-        updateEpicStatus(epic);
+        updateEpicStatusAndTime(epic);
         addToPrioritized(subtask);
         return subtask;
     }
@@ -137,7 +137,7 @@ public class InMemoryTaskManager implements TaskManager {
         subtasks.put(newSubtask.getId(), newSubtask);
         Epic epic = epics.get(newSubtask.getEpicId());
         if (epic != null) {
-            updateEpicStatus(epic);
+            updateEpicStatusAndTime(epic);
         }
         addToPrioritized(newSubtask);
     }
@@ -145,7 +145,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void updateEpic(Epic epic) {
         epics.put(epic.getId(), epic);
-        updateEpicStatus(epic);
+        updateEpicStatusAndTime(epic);
     }
 
     @Override
@@ -165,7 +165,7 @@ public class InMemoryTaskManager implements TaskManager {
             Epic epic = epics.get(subtask.getEpicId());
             if (epic != null) {
                 epic.getSubtaskIds().remove(Integer.valueOf(subtaskId));
-                updateEpicStatus(epic);
+                updateEpicStatusAndTime(epic);
             }
             historyManager.remove(subtaskId);
         }
@@ -239,7 +239,7 @@ public class InMemoryTaskManager implements TaskManager {
         return epicSubtasks;
     }
 
-    protected void updateEpicStatus(Epic epic) {
+    protected void updateEpicStatusAndTime(Epic epic) {
         List<Subtask> subtasks = getSubtasksByEpicId(epic.getId());
         if (subtasks.isEmpty()) {
             epic.setDuration(Duration.ZERO);

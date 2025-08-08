@@ -98,7 +98,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             }
 
             for (Epic epic : manager.epics.values()) {
-                manager.updateEpicStatus(epic);
+                manager.updateEpicStatusAndTime(epic);
             }
 
         } catch (IOException e) {
