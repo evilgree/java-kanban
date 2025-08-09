@@ -2,6 +2,7 @@ package http;
 
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -21,15 +22,21 @@ import java.time.LocalDateTime;
 public class HttpTaskManagerHistoryTest {
 
     private TaskManager manager;
-    private HttpTaskServer taskServer;
+    private static HttpTaskServer taskServer;
     private HttpClient client;
     private Gson gson;
 
-    public HttpTaskManagerHistoryTest() throws IOException {
+    @BeforeAll
+    public static void startServer() throws IOException {
         HistoryManager historyManager = new InMemoryHistoryManager();
         manager = new InMemoryTaskManager(historyManager);
-        client = HttpClient.newHttpClient();
-        gson = new Gson();
+        taskServer = new HttpTaskServer(manager);
+        taskServer.start();
+    }
+
+    @AfterAll
+    public static void stopServer() {
+        taskServer.stop();
     }
 
     @BeforeEach
@@ -37,12 +44,8 @@ public class HttpTaskManagerHistoryTest {
         manager.deleteAllTasks();
         manager.deleteAllSubtasks();
         manager.deleteAllEpics();
-        taskServer.start();
-    }
-
-    @AfterEach
-    public void shutDown() {
-        taskServer.stop();
+        client = HttpClient.newHttpClient();
+        gson = new Gson();
     }
 
     @Test
