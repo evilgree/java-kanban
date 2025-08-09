@@ -1,6 +1,6 @@
 package http;
 
-import com.google.common.reflect.TypeToken;
+import com.google.gson.reflect.TypeToken;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterEach;
@@ -46,7 +46,7 @@ public class HttpTaskManagerHistoryTest {
     public void testGetHistory() throws IOException, InterruptedException {
         Task task = new Task("Task 1", "Description", Status.NEW);
         manager.createTask(task);
-        manager.getTaskById(task.getId()); // Добавляем в историю
+        manager.getTaskById(task.getId());
 
         URI url = URI.create("http://localhost:8080/history");
         HttpRequest request = HttpRequest.newBuilder().uri(url).GET().build();
