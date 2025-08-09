@@ -1,6 +1,7 @@
 package http;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.HttpServer;
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -18,7 +19,9 @@ public class HttpTaskServer {
 
     public HttpTaskServer(TaskManager taskManager) {
         this.taskManager = taskManager;
-        this.gson = new Gson();
+        this.gson = new GsonBuilder()
+                .registerTypeAdapter(java.time.Duration.class, new DurationAdapter())
+                .create();
     }
 
     public void start() throws IOException {
