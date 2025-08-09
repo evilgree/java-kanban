@@ -46,7 +46,10 @@ public class HttpTaskManagerHistoryTest {
         manager.deleteAllSubtasks();
         manager.deleteAllEpics();
         client = HttpClient.newHttpClient();
-        gson = new Gson();
+        gson = new GsonBuilder()
+                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
+                .registerTypeAdapter(Duration.class, new DurationAdapter())
+                .create();
     }
 
     @Test
