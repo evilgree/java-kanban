@@ -33,5 +33,9 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="google.api.client.data.books.v1.atom" level="project" />
+    <orderEntry type="library" name="fatboyindustrial.gson.javatime.serialisers" level="project" />
+    <orderEntry type="library" name="firstbird.backbone.gson_2.11" level="project" />
+    <orderEntry type="library" name="io.gravitee.apim.gateway.handlers.api" level="project" />
   </component>
 </module>

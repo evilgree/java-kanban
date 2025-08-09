@@ -47,4 +47,14 @@ public interface TaskManager {
     List<Subtask> getSubtasksByEpicId(int epicId);
 
     List<Task> getHistory();
+
+    void deleteEpicById(int id);
+
+    void deleteSubtaskById(int id);
+
+    boolean hasIntersection(Epic epic);
+
+    List<Task> getPrioritizedTasks();
+
+    boolean hasIntersection(Subtask subtask);
 }
