@@ -34,7 +34,6 @@ public class EpicHandler extends BaseHttpHandler implements HttpHandler {
                         List<Epic> epics = taskManager.getAllEpics();
                         String response = gson.toJson(epics);
                         sendText(exchange, response, 200);
-                    } else {
                     }
                     break;
 
@@ -47,9 +46,7 @@ public class EpicHandler extends BaseHttpHandler implements HttpHandler {
                     break;
 
                 case "DELETE":
-                    // обработка удаления эпиков
                     break;
-
                 default:
                     sendNotFound(exchange);
             }
