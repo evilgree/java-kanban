@@ -4,6 +4,7 @@ import com.google.gson.reflect.TypeToken;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.net.URI;
@@ -20,7 +21,7 @@ import java.time.LocalDateTime;
 
 public class HttpTaskManagerSubtasksTest {
 
-    private TaskManager manager;
+    private static TaskManager manager;
     private static HttpTaskServer taskServer;
     private HttpClient client;
     private Gson gson;
