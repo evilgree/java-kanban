@@ -23,6 +23,7 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
+        System.out.println("Received request: " + exchange.getRequestMethod() + " " + exchange.getRequestURI());
         String response;
         switch (exchange.getRequestMethod()) {
             case "GET":
@@ -42,5 +43,6 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
             default:
                 sendNotFound(exchange);
         }
+        System.out.println("Completed request: " + exchange.getRequestMethod() + " " + exchange.getRequestURI());
     }
 }

@@ -21,17 +21,19 @@ public class HistoryHandler extends BaseHttpHandler implements HttpHandler {
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
-        if (!"GET".equalsIgnoreCase(exchange.getRequestMethod())) {
-            sendText(exchange, "Method not allowed", 405);
-            return;
-        }
+        System.out.println("Received request: " + exchange.getRequestMethod() + " " + exchange.getRequestURI());
         try {
-            List<Task> history = taskManager.getHistory();
-            String response = gson.toJson(history);
-            sendText(exchange, response, 200);
+            if ("GET".equals(exchange.getRequestMethod())) {
+                List<Task> history = taskManager.getHistory();
+                String response = gson.toJson(history);
+                sendText(exchange, response, 200);
+            } else {
+                sendNotFound(exchange);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             sendText(exchange, "Internal server error", 500);
         }
+        System.out.println("Completed request: " + exchange.getRequestMethod() + " " + exchange.getRequestURI());
     }
 }

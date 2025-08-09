@@ -23,6 +23,7 @@ public class SubtaskHandler extends BaseHttpHandler implements HttpHandler {
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
+        System.out.println("Received request: " + exchange.getRequestMethod() + " " + exchange.getRequestURI());
         try {
             String method = exchange.getRequestMethod();
             String query = exchange.getRequestURI().getQuery();
@@ -100,5 +101,6 @@ public class SubtaskHandler extends BaseHttpHandler implements HttpHandler {
             e.printStackTrace();
             sendText(exchange, "Internal server error", 500);
         }
+        System.out.println("Completed request: " + exchange.getRequestMethod() + " " + exchange.getRequestURI());
     }
 }

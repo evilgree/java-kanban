@@ -27,18 +27,27 @@ public class HttpTaskServer {
 
     public void start() throws IOException {
         server = HttpServer.create(new InetSocketAddress(8080), 0);
+
         server.createContext("/tasks", new TaskHandler(taskManager, gson));
         server.createContext("/subtasks", new SubtaskHandler(taskManager, gson));
         server.createContext("/epics", new EpicHandler(taskManager, gson));
         server.createContext("/history", new HistoryHandler(taskManager, gson));
         server.createContext("/prioritized", new PrioritizedHandler(taskManager, gson));
+
         server.start();
         System.out.println("Server started on port 8080");
+
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            System.out.println("Shutdown hook triggered. Stopping server...");
+            stop();
+        }));
     }
 
     public void stop() {
-        server.stop(0);
-        System.out.println("Server stopped");
+        if (server != null) {
+            server.stop(0); // 0 — немедленная остановка
+            System.out.println("Server stopped");
+        }
     }
 
     public static void main(String[] args) throws IOException {
