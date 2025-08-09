@@ -1,0 +1,20 @@
+<component name="libraryTable">
+  <library name="google.api.client.data.books.v1.atom" type="repository">
+    <properties maven-id="com.google.api.client:google-api-data-books-v1-atom:1.0.9-alpha" />
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/google/api/client/google-api-data-books-v1-atom/1.0.9-alpha/google-api-data-books-v1-atom-1.0.9-alpha.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/google/api/client/google-api-client-xml/1.0.9-alpha/google-api-client-xml-1.0.9-alpha.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/google/api/client/google-api-client-http/1.0.9-alpha/google-api-client-http-1.0.9-alpha.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/google/api/client/google-api-client-escape/1.0.9-alpha/google-api-client-escape-1.0.9-alpha.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/google/api/client/google-api-client-util/1.0.9-alpha/google-api-client-util-1.0.9-alpha.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/google/api/client/google-api-data-books-v1-atom/1.0.9-alpha/google-api-data-books-v1-atom-1.0.9-alpha-javadoc.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/google/api/client/google-api-client-xml/1.0.9-alpha/google-api-client-xml-1.0.9-alpha-javadoc.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/google/api/client/google-api-client-http/1.0.9-alpha/google-api-client-http-1.0.9-alpha-javadoc.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/google/api/client/google-api-client-escape/1.0.9-alpha/google-api-client-escape-1.0.9-alpha-javadoc.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/google/api/client/google-api-client-util/1.0.9-alpha/google-api-client-util-1.0.9-alpha-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES />
+  </library>
+</component>
