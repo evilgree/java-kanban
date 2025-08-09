@@ -92,7 +92,6 @@ public class SubtaskHandler extends BaseHttpHandler implements HttpHandler {
                         sendText(exchange, "Bad request", 400);
                     }
                     break;
-
                 default:
                     sendText(exchange, "Method not allowed", 405);
                     break;

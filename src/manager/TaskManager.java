@@ -57,4 +57,6 @@ public interface TaskManager {
     List<Task> getPrioritizedTasks();
 
     boolean hasIntersection(Subtask subtask);
+
+    void deleteTaskById(int id);
 }

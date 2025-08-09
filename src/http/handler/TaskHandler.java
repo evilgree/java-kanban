@@ -39,6 +39,18 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
                 sendText(exchange, "Task created", 201);
                 break;
             case "DELETE":
+                String query = exchange.getRequestURI().getQuery();
+                if (query == null || !query.startsWith("id=")) {
+                    sendText(exchange, "Bad request", 400);
+                    break;
+                }
+                int id = Integer.parseInt(query.substring(3));
+                if (taskManager.getTaskById(id) != null) {
+                    taskManager.deleteTaskById(id);
+                    sendText(exchange, "Task deleted", 200);
+                } else {
+                    sendText(exchange, "Task not found", 404);
+                }
                 break;
             default:
                 sendNotFound(exchange);

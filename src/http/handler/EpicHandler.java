@@ -46,7 +46,19 @@ public class EpicHandler extends BaseHttpHandler implements HttpHandler {
                     break;
 
                 case "DELETE":
+                    if (query == null || !query.startsWith("id=")) {
+                        sendText(exchange, "Bad request", 400);
+                        break;
+                    }
+                    int id = Integer.parseInt(query.substring(3));
+                    if (taskManager.getEpicById(id) != null) {
+                        taskManager.deleteEpicById(id);
+                        sendText(exchange, "Epic deleted", 200);
+                    } else {
+                        sendText(exchange, "Epic not found", 404);
+                    }
                     break;
+
                 default:
                     sendNotFound(exchange);
             }
