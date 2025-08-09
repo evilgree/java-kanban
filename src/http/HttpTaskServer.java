@@ -21,6 +21,7 @@ public class HttpTaskServer {
         this.taskManager = taskManager;
         this.gson = new GsonBuilder()
                 .registerTypeAdapter(java.time.Duration.class, new DurationAdapter())
+                .registerTypeAdapter(java.time.LocalDateTime.class, new LocalDateTimeAdapter())
                 .create();
     }
 
