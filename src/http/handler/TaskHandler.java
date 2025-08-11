@@ -69,9 +69,18 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
     }
 
     protected void handleDelete(HttpExchange exchange) throws IOException {
-        String path = exchange.getRequestURI().getPath();
-        String id = path.substring(path.lastIndexOf("/") + 1);
-        taskManager.deleteTask(Integer.parseInt(id));
-        sendText(exchange, "Task deleted", 200);
+        String query = exchange.getRequestURI().getQuery(); // например "id=4"
+        if (query == null || !query.startsWith("id=")) {
+            sendText(exchange, "Missing or invalid id parameter", 400);
+            return;
+        }
+        String idStr = query.substring(3);
+        try {
+            int id = Integer.parseInt(idStr);
+            taskManager.deleteTask(id);
+            sendText(exchange, "Task deleted", 200);
+        } catch (NumberFormatException e) {
+            sendText(exchange, "Invalid id parameter", 400);
+        }
     }
 }
