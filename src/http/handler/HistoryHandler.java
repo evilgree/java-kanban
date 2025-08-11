@@ -24,16 +24,20 @@ public class HistoryHandler extends BaseHttpHandler implements HttpHandler {
         System.out.println("Received request: " + exchange.getRequestMethod() + " " + exchange.getRequestURI());
         try {
             if ("GET".equals(exchange.getRequestMethod())) {
-                List<Task> history = taskManager.getHistory();
-                String response = gson.toJson(history);
-                sendText(exchange, response, 200);
+                handleGet(exchange);
             } else {
-                sendNotFound(exchange);
+                sendText(exchange, "Method not allowed", 405);
             }
         } catch (Exception e) {
             e.printStackTrace();
             sendText(exchange, "Internal server error", 500);
         }
         System.out.println("Completed request: " + exchange.getRequestMethod() + " " + exchange.getRequestURI());
+    }
+
+    protected void handleGet(HttpExchange exchange) throws IOException {
+        List<Task> history = taskManager.getHistory();
+        String jsonResponse = gson.toJson(history);
+        sendText(exchange, jsonResponse, 200);
     }
 }

@@ -17,7 +17,7 @@ public class BaseHttpHandler {
         sendText(exchange, "Resource not found", 404);
     }
 
-    protected void sendHasInteractions(HttpExchange exchange) throws IOException {
-        sendText(exchange, "Task intersects with existing tasks", 406);
+    protected String readRequestBody(HttpExchange exchange) throws IOException {
+        return new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
     }
 }

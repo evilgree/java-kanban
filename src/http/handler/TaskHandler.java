@@ -8,8 +8,6 @@ import model.Task;
 import http.BaseHttpHandler;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 public class TaskHandler extends BaseHttpHandler implements HttpHandler {
@@ -24,37 +22,56 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         System.out.println("Received request: " + exchange.getRequestMethod() + " " + exchange.getRequestURI());
-        String response;
-        switch (exchange.getRequestMethod()) {
-            case "GET":
-                List<Task> tasks = taskManager.getAllTasks();
-                response = gson.toJson(tasks);
-                sendText(exchange, response, 200);
-                break;
-            case "POST":
-                InputStream is = exchange.getRequestBody();
-                String body = new String(is.readAllBytes(), StandardCharsets.UTF_8);
-                Task task = gson.fromJson(body, Task.class);
-                taskManager.createTask(task);
-                sendText(exchange, "Task created", 201);
-                break;
-            case "DELETE":
-                String query = exchange.getRequestURI().getQuery();
-                if (query == null || !query.startsWith("id=")) {
-                    sendText(exchange, "Bad request", 400);
+        try {
+            switch (exchange.getRequestMethod()) {
+                case "GET":
+                    handleGet(exchange);
                     break;
-                }
-                int id = Integer.parseInt(query.substring(3));
-                if (taskManager.getTaskById(id) != null) {
-                    taskManager.deleteTaskById(id);
-                    sendText(exchange, "Task deleted", 200);
-                } else {
-                    sendText(exchange, "Task not found", 404);
-                }
-                break;
-            default:
-                sendNotFound(exchange);
+                case "POST":
+                    handlePost(exchange);
+                    break;
+                case "DELETE":
+                    handleDelete(exchange);
+                    break;
+                default:
+                    sendText(exchange, "Method not allowed", 405);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            sendText(exchange, "Internal server error", 500);
         }
         System.out.println("Completed request: " + exchange.getRequestMethod() + " " + exchange.getRequestURI());
+    }
+
+    protected void handleGet(HttpExchange exchange) throws IOException {
+        String path = exchange.getRequestURI().getPath();
+        if (path.equals("/tasks")) {
+            List<Task> tasks = taskManager.getAllTasks();
+            String jsonResponse = gson.toJson(tasks);
+            sendText(exchange, jsonResponse, 200);
+        } else {
+            String id = path.substring(path.lastIndexOf("/") + 1);
+            Task task = taskManager.getTaskById(Integer.parseInt(id));
+            if (task != null) {
+                String jsonResponse = gson.toJson(task);
+                sendText(exchange, jsonResponse, 200);
+            } else {
+                sendNotFound(exchange);
+            }
+        }
+    }
+
+    protected void handlePost(HttpExchange exchange) throws IOException {
+        String body = readRequestBody(exchange);
+        Task task = gson.fromJson(body, Task.class);
+        taskManager.createTask(task);
+        sendText(exchange, "Task created", 201);
+    }
+
+    protected void handleDelete(HttpExchange exchange) throws IOException {
+        String path = exchange.getRequestURI().getPath();
+        String id = path.substring(path.lastIndexOf("/") + 1);
+        taskManager.deleteTask(Integer.parseInt(id));
+        sendText(exchange, "Task deleted", 200);
     }
 }

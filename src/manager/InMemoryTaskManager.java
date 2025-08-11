@@ -113,41 +113,6 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void deleteEpicById(int epicId) {
-        Epic epic = epics.remove(epicId);
-        if (epic != null) {
-            for (int subtaskId : epic.getSubtaskIds()) {
-                deleteSubtask(subtaskId);
-            }
-            historyManager.remove(nextId);
-        }
-    }
-
-    @Override
-    public void deleteSubtaskById(int subtaskId) {
-        Subtask subtask = subtasks.remove(subtaskId);
-        if (subtask != null) {
-            Epic epic = epics.get(subtask.getEpicId());
-            if (epic != null) {
-                epic.getSubtaskIds().remove(Integer.valueOf(subtaskId));
-                updateEpicStatusAndTime(epic);
-            }
-            removeFromPrioritized(subtask);
-            historyManager.remove(subtaskId);
-        }
-    }
-
-    @Override
-    public boolean hasIntersection(Epic epic) {
-        for (Task existingTask : tasks.values()) {
-            if (isIntersectingWith(epic, existingTask)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
     public void updateTask(Task newTask) {
         if (isIntersecting(newTask)) {
             throw new IllegalArgumentException("Обновляемая задача пересекается по времени с другой задачей");
@@ -377,14 +342,5 @@ public class InMemoryTaskManager implements TaskManager {
             }
         }
         return false;
-    }
-
-    @Override
-    public void deleteTaskById(int id) {
-        Task task = tasks.remove(id);
-        if (task != null) {
-            removeFromPrioritized(task);
-            historyManager.remove(id);
-        }
     }
 }
