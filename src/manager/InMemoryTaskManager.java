@@ -333,14 +333,4 @@ public class InMemoryTaskManager implements TaskManager {
     public List<Task> getPrioritizedTasks() {
         return new ArrayList<>(prioritizedTasks);
     }
-
-    @Override
-    public boolean hasIntersection(Subtask subtask) {
-        for (Task existingTask : tasks.values()) {
-            if (isIntersectingWith(subtask, existingTask)) {
-                return true;
-            }
-        }
-        return false;
-    }
 }

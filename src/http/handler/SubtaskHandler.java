@@ -64,23 +64,43 @@ public class SubtaskHandler extends BaseHttpHandler implements HttpHandler {
     protected void handlePost(HttpExchange exchange) throws IOException {
         String body = readRequestBody(exchange);
         Subtask subtask = gson.fromJson(body, Subtask.class);
-        taskManager.createSubtask(subtask);
-        sendText(exchange, "Subtask created", 201);
+        if (subtask == null) {
+            sendText(exchange, "Invalid subtask data", 400);
+            return;
+        }
+        if (subtask.getId() == 0) {
+            taskManager.createSubtask(subtask);
+            sendText(exchange, "Subtask created", 201);
+        } else {
+            if (taskManager.getSubtaskById(subtask.getId()) != null) {
+                taskManager.updateSubtask(subtask);
+                sendText(exchange, "Subtask updated", 201);
+            } else {
+                sendNotFound(exchange);
+            }
+        }
     }
 
     protected void handleDelete(HttpExchange exchange) throws IOException {
-        String query = exchange.getRequestURI().getQuery(); // например "id=4"
-        if (query == null || !query.startsWith("id=")) {
-            sendText(exchange, "Missing or invalid id parameter", 400);
-            return;
-        }
-        String idStr = query.substring(3);
-        try {
-            int id = Integer.parseInt(idStr);
-            taskManager.deleteSubtask(id);
-            sendText(exchange, "Subtask deleted", 200);
-        } catch (NumberFormatException e) {
-            sendText(exchange, "Invalid id parameter", 400);
+        String path = exchange.getRequestURI().getPath();
+        String[] parts = path.split("/");
+        if (parts.length == 2) {
+            taskManager.deleteAllSubtasks();
+            sendText(exchange, "All subtasks deleted", 200);
+        } else if (parts.length == 3) {
+            try {
+                int id = Integer.parseInt(parts[2]);
+                if (taskManager.getSubtaskById(id) != null) {
+                    taskManager.deleteSubtask(id);
+                    sendText(exchange, "Subtask deleted", 200);
+                } else {
+                    sendNotFound(exchange);
+                }
+            } catch (NumberFormatException e) {
+                sendText(exchange, "Invalid id format", 400);
+            }
+        } else {
+            sendNotFound(exchange);
         }
     }
 }

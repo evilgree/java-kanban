@@ -64,23 +64,43 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
     protected void handlePost(HttpExchange exchange) throws IOException {
         String body = readRequestBody(exchange);
         Task task = gson.fromJson(body, Task.class);
-        taskManager.createTask(task);
-        sendText(exchange, "Task created", 201);
+        if (task == null) {
+            sendText(exchange, "Invalid task data", 400);
+            return;
+        }
+        if (task.getId() == 0) {
+            taskManager.createTask(task);
+            sendText(exchange, "Task created", 201);
+        } else {
+            if (taskManager.getTaskById(task.getId()) != null) {
+                taskManager.updateTask(task);
+                sendText(exchange, "Task updated", 201);
+            } else {
+                sendNotFound(exchange);
+            }
+        }
     }
 
     protected void handleDelete(HttpExchange exchange) throws IOException {
-        String query = exchange.getRequestURI().getQuery(); // например "id=4"
-        if (query == null || !query.startsWith("id=")) {
-            sendText(exchange, "Missing or invalid id parameter", 400);
-            return;
-        }
-        String idStr = query.substring(3);
-        try {
-            int id = Integer.parseInt(idStr);
-            taskManager.deleteTask(id);
-            sendText(exchange, "Task deleted", 200);
-        } catch (NumberFormatException e) {
-            sendText(exchange, "Invalid id parameter", 400);
+        String path = exchange.getRequestURI().getPath();
+        String[] parts = path.split("/");
+        if (parts.length == 2) {
+            taskManager.deleteAllTasks();
+            sendText(exchange, "All tasks deleted", 200);
+        } else if (parts.length == 3) {
+            try {
+                int id = Integer.parseInt(parts[2]);
+                if (taskManager.getTaskById(id) != null) {
+                    taskManager.deleteTask(id);
+                    sendText(exchange, "Task deleted", 200);
+                } else {
+                    sendNotFound(exchange);
+                }
+            } catch (NumberFormatException e) {
+                sendText(exchange, "Invalid id format", 400);
+            }
+        } else {
+            sendNotFound(exchange);
         }
     }
 }

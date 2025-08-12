@@ -19,8 +19,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import http.Adapters.DurationAdapter;
-import http.Adapters.LocalDateTimeAdapter;
+import http.adapters.DurationAdapter;
+import http.adapters.LocalDateTimeAdapter;
 
 
 public class HttpTaskManagerSubtasksTest {
@@ -103,7 +103,7 @@ public class HttpTaskManagerSubtasksTest {
         Subtask subtask = new Subtask("Subtask to delete", "Description", epic.getId(), Status.NEW);
         manager.createSubtask(subtask);
 
-        URI url = URI.create("http://localhost:8080/subtasks?id=" + subtask.getId());
+        URI url = URI.create("http://localhost:8080/subtasks/" + subtask.getId());
         HttpRequest request = HttpRequest.newBuilder().uri(url).DELETE().build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 

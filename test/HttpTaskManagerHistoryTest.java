@@ -19,8 +19,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import http.Adapters.DurationAdapter;
-import http.Adapters.LocalDateTimeAdapter;
+import http.adapters.DurationAdapter;
+import http.adapters.LocalDateTimeAdapter;
 
 
 public class HttpTaskManagerHistoryTest {
